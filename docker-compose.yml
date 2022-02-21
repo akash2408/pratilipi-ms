@@ -1,0 +1,52 @@
+version: '3.9'
+services:
+  
+  nosql-db:
+    image: mongo:3.6.8
+    ports:
+      - 27017:27017
+    container_name: nosql-db
+    volumes:
+      - db:/data/db
+
+  story:
+    build:
+      dockerfile: Dockerfile
+      context: ./story
+    container_name: story_container
+    ports:
+      - 8002:8002
+    restart: always
+    depends_on:
+      - nosql-db
+    volumes:
+      - .:/app
+      - /app/story/node_modules
+
+  user:
+    build:
+      dockerfile: Dockerfile
+      context: ./user
+    container_name: user_container
+    ports:
+      - 8001:8001
+    restart: always
+    depends_on:
+      - nosql-db
+    volumes:
+      - .:/app
+      - /app/user/node_modules
+  gateway:
+    build:
+      dockerfile: Dockerfile
+      context: ./gateway
+    container_name: gateway_container
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+      - /app/gateway/node_modules
+
+volumes:
+  db : {}
