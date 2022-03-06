@@ -47,7 +47,7 @@ exports.dislike = (req,res) => {
 	        msg: "Something Went Wrong", });
    		}
    		else if(storyFound){
-		    axios.post('http://localhost:8000/api/user/app-events', {
+		    axios.post('http://gateway:8000/api/user/app-events', {
 		            payload
 		    })
 		    .then(function (response) {
@@ -68,7 +68,7 @@ exports.dislike = (req,res) => {
 		  	.catch(function (error) {
 				    res.status(400).json({
 				    error: error,
-				    msg: error.response.data.msg
+				    msg: (error.response) ? error.response.data.msg : "Something Went Wrong"
 				});
 		  	});
    		}

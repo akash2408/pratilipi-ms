@@ -147,11 +147,16 @@ exports.refresh = (req, res, next) => {
 };
 
 exports.userLikedStories = (req,res) => {
-    user.findOne({ user : req.currentUser._id }).exec((error,userFound) => {
+    user.findById(req.currentUser._id).exec((error,userFound) => {
         if(error){
             return res.status(400).json({
                 error: error,
                 msg: "Something Went Wrong", });            
+        }
+        if(!userFound){
+            return res.status(400).json({
+                success : false,
+                msg: "User Not UserFound", });              
         }
         else{
             return res.status(200).json({
